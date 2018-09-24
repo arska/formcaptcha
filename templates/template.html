@@ -1,0 +1,14 @@
+<html>
+  <body>
+    <h1>Thanks for submitting, please solve captcha below</h1>
+    <form method="post" action="/">
+      {% for input in form%}
+        {% if form[input] %}
+          <input type="hidden" name="{{ input }}" value="{{ form[input] }}" />
+        {% endif %}
+      {% endfor %}
+      {{ recaptcha }}
+      <input type="submit" value="send">
+    </form>
+  </body>
+</html>
