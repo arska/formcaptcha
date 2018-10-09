@@ -1,4 +1,7 @@
 <html>
+  <head>
+    <title>Formcaptcha</title>
+    <script src="https://www.google.com/recaptcha/api.js?render={{ config['RECAPTCHA_SITE_KEY'] }}"></script>
   <body>
     <h1>Thanks for submitting, please solve captcha below</h1>
     <form method="post" action="/">
@@ -7,9 +10,15 @@
           <input type="hidden" name="{{ input }}" value="{{ form[input] }}" />
         {% endif %}
       {% endfor %}
-      <script src='//www.google.com/recaptcha/api.js'></script>
-      <div class="g-recaptcha" data-sitekey="{{ config['RECAPTCHA_SITE_KEY'] }}" data-theme="light" data-type="image" data-size="normal"></div>
+      <input type="hidden" name="g-recaptcha-response" />
       <input type="submit" value="send" />
     </form>
+    <script>
+    grecaptcha.ready(function() {
+      grecaptcha.execute('{{ config['RECAPTCHA_SITE_KEY'] }}', {action: 'formcaptcha'}).then(function(token) {
+        document.getElementsByName("g-recaptcha-response")[0].value = token;
+      });
+    });
+    </script>
   </body>
 </html>
