@@ -7,8 +7,9 @@
           <input type="hidden" name="{{ input }}" value="{{ form[input] }}" />
         {% endif %}
       {% endfor %}
-      {{ recaptcha }}
-      <input type="submit" value="send">
+      <script src='//www.google.com/recaptcha/api.js'></script>
+      <div class="g-recaptcha" data-sitekey="{{ config['RECAPTCHA_SITE_KEY'] }}" data-theme="light" data-type="image" data-size="normal"></div>
+      <input type="submit" value="send" />
     </form>
   </body>
 </html>

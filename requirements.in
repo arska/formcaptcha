@@ -1,4 +1,5 @@
 Flask
-Flask-GoogleRecaptcha
-tox
 python-dotenv
+requests
+tox==3.3
+tox-pip-extensions

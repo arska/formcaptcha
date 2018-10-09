@@ -5,15 +5,14 @@ Show google recaptcha challenge for form submissions matching simple heuristics
 import os
 import logging
 from flask import Flask, request, render_template, redirect
-from flask_google_recaptcha import GoogleReCaptcha
-from dotenv import load_dotenv
 from werkzeug.urls import url_encode
+from dotenv import load_dotenv
+import requests
 
 
-APP = Flask(__name__)  # Standard Flask app
+APP = Flask(__name__)
 APP.config["RECAPTCHA_SITE_KEY"] = os.environ.get("RECAPTCHA_SITE_KEY")
 APP.config["RECAPTCHA_SECRET_KEY"] = os.environ.get("RECAPTCHA_SECRET_KEY")
-RECAPTCHA = GoogleReCaptcha(app=APP)
 
 LOGFORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 logging.basicConfig(level=logging.DEBUG, format=LOGFORMAT)
@@ -31,7 +30,9 @@ def captcha():
 
     filteredform = form.copy()
     filteredform.pop("g-recaptcha-response", None)
-    redirecturl = os.environ.get("REDIRECT_URL", "/") + "?" + url_encode(filteredform)
+    redirecturl = (
+        os.environ.get("REDIRECT_URL", "/") + "?" + url_encode(filteredform)
+    )
 
     # simple heuristic to determine if captcha needs to be shown
     if (
@@ -42,9 +43,31 @@ def captcha():
         return redirect(redirecturl)
 
     if form.get("g-recaptcha-response"):
-        if RECAPTCHA.verify(response=form.get("g-recaptcha-response")):
+        if verifycaptcha(response=form.get("g-recaptcha-response")):
             return redirect(redirecturl)
+
     return render_template("template.html", form=filteredform)
+
+
+def verifycaptcha(response, remote_ip=None):
+    """
+    verify a google recaptcha response
+    """
+    data = {
+        "secret": APP.config["RECAPTCHA_SECRET_KEY"],
+        "response": response,
+        "remoteip": remote_ip or request.environ.get("REMOTE_ADDR"),
+    }
+    resp = requests.post(
+        "https://www.google.com/recaptcha/api/siteverify", data=data
+    )
+    content = resp.json()
+    logging.debug(content)
+    return (
+        content["success"]
+        or content["error-codes"][0] == "timeout-or-duplicate"
+        and resp.status_code == 200
+    )
 
 
 if __name__ == "__main__":
