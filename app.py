@@ -28,6 +28,8 @@ def captcha():
     else:
         form = request.form
 
+    logging.debug(form)
+
     filteredform = form.copy()
     filteredform.pop("g-recaptcha-response", None)
     redirecturl = (
