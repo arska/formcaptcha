@@ -1,5 +1,5 @@
 Flask
 python-dotenv
 requests
-tox==3.3
+tox
 tox-pip-extensions
