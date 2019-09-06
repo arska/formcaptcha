@@ -3,7 +3,7 @@
     <title>Formcaptcha</title>
     <script src="https://www.google.com/recaptcha/api.js?render={{ config['RECAPTCHA_SITE_KEY'] }}"></script>
   <body>
-    <h1>Thanks for submitting, please solve the captcha by clicking the button below:</h1>
+    <h1>Thanks for submitting, for security reasons please confirm by clicking the button below:</h1>
     <form method="post" action="/" name="myform">
       {% for input in form%}
         {% if form[input] %}
