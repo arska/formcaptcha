@@ -38,16 +38,19 @@ def captcha():
 
     # simple heuristic to determine if captcha needs to be shown
     if (
-        form.get("q1_control_fname", False)
-        and form.get("q3_control_lname", False)
-        and not form.get("q1_control_fname") == form.get("q3_control_lname")
+        form.get("q1_vorname", False)
+        and form.get("q3_nachname", False)
+        and not form.get("q1_vorname") == form.get("q3_nachname")
     ):
+        # if there is an unique first and last name we're ok
         return redirect(redirecturl)
 
     if form.get("g-recaptcha-response"):
         if verifycaptcha(response=form.get("g-recaptcha-response")):
+            # if the captcha was solved successfully we're ok
             return redirect(redirecturl)
 
+    # else: show captcha solving page
     return render_template("template.html", form=filteredform)
 
 
