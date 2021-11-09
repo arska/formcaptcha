@@ -12,7 +12,7 @@ flask==2.0.2
 idna==3.3                 # via requests
 importlib-metadata==4.8.2  # via click
 itsdangerous==2.0.1       # via flask
-jinja2==3.0.2             # via flask
+jinja2==3.0.3             # via flask
 markupsafe==2.0.1         # via jinja2
 python-dotenv==0.19.1
 requests==2.26.0
