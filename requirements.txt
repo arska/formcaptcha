@@ -18,5 +18,5 @@ python-dotenv==0.19.2
 requests==2.27.1
 typing-extensions==3.10.0.2  # via importlib-metadata
 urllib3==1.26.8           # via requests
-werkzeug==2.0.2           # via flask
+werkzeug==2.0.3           # via flask
 zipp==3.7.0               # via importlib-metadata
